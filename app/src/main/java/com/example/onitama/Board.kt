@@ -3,11 +3,11 @@ package com.example.onitama
 import com.example.onitama.card.*
 
 class Board(
-    var board: ArrayList<ArrayList<String>>,
-    var cardP1: ArrayList<Card>,
-    var cardP2: ArrayList<Card>,
-    var cardM: Card,
-    var turn: String
+    var board: ArrayList<ArrayList<String>>,//array 2d papan
+    var cardP1: ArrayList<Card>,//array 2 kartu dipengang player 1
+    var cardP2: ArrayList<Card>,//array 2 kartu dipengang player 2
+    var cardM: Card,//kartu di sebelah papan
+    var turn: String//turn player sekarang
 ) {
 
     override fun toString(): String {

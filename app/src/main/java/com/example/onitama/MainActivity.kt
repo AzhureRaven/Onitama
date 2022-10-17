@@ -17,7 +17,7 @@ class MainActivity : AppCompatActivity() {
         tiles= ArrayList()
         for(i in 1..5){
             for(j in 1..5){
-                var tileID = "x$i"+"y$j"
+                val tileID = "x$i"+"y$j"
                 val resourcesID = this.resources.getIdentifier(tileID, "id", packageName)
                 tiles.add(findViewById(resourcesID))
             }
@@ -27,6 +27,7 @@ class MainActivity : AppCompatActivity() {
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
     fun startGame(){
+        //function untuk start game
         val cards = ArrayList<Card>()
         cards.add(TigerCard())
         cards.add(CrabCard())
@@ -64,19 +65,8 @@ class MainActivity : AppCompatActivity() {
         board = Board(b, arrayListOf(c[0],c[1]),arrayListOf(c[2],c[3]),c[4],"P1")
     }
     fun print_to_board(){
-        //temp
-
-        val b = arrayListOf<ArrayList<String>>(
-            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
-            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
-            arrayListOf<String>("N","N","S2","S2","M2","S2","S2","N","N"),
-            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
-            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
-            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
-            arrayListOf<String>("N","N","S1","S1","M1","S1","S1","N","N"),
-            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
-            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
-        )
+        //fungsi untuk print board ke UI
+        val b = board.board
         var counter=0
         for (i in 2..6) {
             for (j in 2..6) {
