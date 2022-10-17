@@ -75,7 +75,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:backgroundTint="#dfd7d4"
+                android:backgroundTint="#E91E63"
                 android:textColor="@color/black" />
 
             <Button
@@ -299,7 +299,7 @@
                 android:layout_marginLeft="2dp"
                 android:layout_marginRight="2dp"
                 android:layout_weight="1"
-                android:backgroundTint="#dfd7d4"
+                android:backgroundTint="#3700B3"
                 android:textColor="@color/black" />
 
             <Button
