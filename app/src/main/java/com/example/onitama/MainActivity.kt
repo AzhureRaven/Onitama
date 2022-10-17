@@ -3,17 +3,28 @@ package com.example.onitama
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.widget.Button
+import android.widget.ImageView
 import android.widget.Toast
 import com.example.onitama.card.*
+import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
     //lateinit var card:Card
+    lateinit var iv_player2_card1: ImageView
+    lateinit var iv_player2_card2: ImageView
+    lateinit var iv_player1_card1: ImageView
+    lateinit var iv_player1_card2: ImageView
+    lateinit var iv_middle_card: ImageView
     lateinit var board: Board
     lateinit var tiles:ArrayList<Button>
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        startGame()
+        iv_player1_card1 = findViewById(R.id.iv_player1_card1)
+        iv_player1_card2 = findViewById(R.id.iv_player1_card2)
+        iv_player2_card1 = findViewById(R.id.iv_player2_card1)
+        iv_player2_card2 = findViewById(R.id.iv_player2_card2)
+        iv_middle_card = findViewById(R.id.iv_middle_card)
         tiles= ArrayList()
         for(i in 1..5){
             for(j in 1..5){
@@ -22,6 +33,8 @@ class MainActivity : AppCompatActivity() {
                 tiles.add(findViewById(resourcesID))
             }
         }
+
+        startGame()
         print_to_board()
         //card = HorseCard()
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
@@ -56,9 +69,10 @@ class MainActivity : AppCompatActivity() {
             arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
             arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
         )
+        val randomGenerator = Random(System.currentTimeMillis())
         val c = ArrayList<Card>()
         for (i in 1..5){
-            val idx = (0..cards.size-1).random()
+            val idx = randomGenerator.nextInt(0, cards.size)
             c.add(cards.get(idx))
             cards.removeAt(idx)
         }
@@ -66,6 +80,8 @@ class MainActivity : AppCompatActivity() {
     }
     fun print_to_board(){
         //fungsi untuk print board ke UI
+
+        //print board
         val b = board.board
         var counter=0
         for (i in 2..6) {
@@ -74,5 +90,17 @@ class MainActivity : AppCompatActivity() {
                 counter++
             }
         }
+
+        //print cards
+        var resourcesID = this.resources.getIdentifier(board.cardP1[0].img, "drawable", packageName)
+        iv_player1_card1.setImageResource(resourcesID)
+        resourcesID = this.resources.getIdentifier(board.cardP1[1].img, "drawable", packageName)
+        iv_player1_card2.setImageResource(resourcesID)
+        resourcesID = this.resources.getIdentifier(board.cardP2[0].img, "drawable", packageName)
+        iv_player2_card1.setImageResource(resourcesID)
+        resourcesID = this.resources.getIdentifier(board.cardP2[1].img, "drawable", packageName)
+        iv_player2_card2.setImageResource(resourcesID)
+        resourcesID = this.resources.getIdentifier(board.cardM.img, "drawable", packageName)
+        iv_middle_card.setImageResource(resourcesID)
     }
 }

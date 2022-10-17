@@ -350,7 +350,7 @@
     </LinearLayout>
 
     <ImageView
-        android:id="@+id/imageView"
+        android:id="@+id/iv_middle_card"
         android:layout_width="100dp"
         android:layout_height="300dp"
         android:layout_margin="0dp"
