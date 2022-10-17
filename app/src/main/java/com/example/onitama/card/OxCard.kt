@@ -5,7 +5,7 @@ class OxCard: Card() {
         this.name = "Ox"
         this.x = arrayListOf(0, 0, 1)
         this.y = arrayListOf(-1, 1, 0)
-        this.img = ""
+        this.img = "ox"
         this.size = x.size
     }
 }
