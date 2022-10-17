@@ -28,7 +28,7 @@ class MainActivity : AppCompatActivity() {
         tiles= ArrayList()
         for(i in 1..5){
             for(j in 1..5){
-                val tileID = "x$i"+"y$j"
+                val tileID = "x$j"+"y$i"
                 val resourcesID = this.resources.getIdentifier(tileID, "id", packageName)
                 tiles.add(findViewById(resourcesID))
             }
@@ -86,7 +86,10 @@ class MainActivity : AppCompatActivity() {
         var counter=0
         for (i in 2..6) {
             for (j in 2..6) {
-                tiles.get(counter).setText(b[j][i])
+                tiles.get(counter).setText(b[i][j])
+                if(counter == 2) tiles.get(counter).setBackgroundColor(resources.getColor(R.color.p2))
+                else if (counter == 22) tiles.get(counter).setBackgroundColor(resources.getColor(R.color.p1))
+                else tiles.get(counter).setBackgroundColor(resources.getColor(R.color.normal))
                 counter++
             }
         }
