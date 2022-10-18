@@ -34,7 +34,7 @@ class Board(
             }
         }
         if(!isAlive) return "P1"
-        if(board[2][4] == "M1") return "P1" //apakah M1 mencapai tempat M2?
+        if(board[2][4] == "M1") return "P1" //apakah M1 mencapai temple M2?
 
         //apakah p2 menang?
         isAlive = false
@@ -48,10 +48,55 @@ class Board(
             }
         }
         if(!isAlive) return "P2"
-        if(board[6][4] == "M2") return "P2" //apakah M1 mencapai tempat M2?
+        if(board[6][4] == "M2") return "P2" //apakah M1 mencapai temple M2?
 
         return "Draw"
     }
+
+    fun cekLegal(): Boolean{
+        //cek apa player masih bisa gerak
+        var ctr = 0
+        if(turn == "P1"){
+            for (i in 2..6) {
+                for (j in 2..6) {
+                    if(this.board[i][j] == "M1" || this.board[i][j] == "S1"){
+                        ctr += legals(cardP1[0],j,i,"1")
+                        ctr += legals(cardP1[1],j,i,"1")
+                        if(ctr > 0){
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        else{
+            for (i in 2..6) {
+                for (j in 2..6) {
+                    if(this.board[i][j] == "M2" || this.board[i][j] == "S2"){
+                        ctr += legals(cardP2[0],j,i,"2")
+                        ctr += legals(cardP2[1],j,i,"2")
+                        if(ctr > 0){
+                            return true
+                        }
+                    }
+                }
+            }
+        }
+        return false
+    }
+
+    fun legals(card: Card, x:Int, y:Int, p: String): Int{
+        //lakukan cek legal moves
+        var flip = 1
+        if(p == "2") flip = -1
+        for (i in 0..card.size-1){
+            if(board[y+card.y[i]*flip][x+card.x[i]*flip] != "M$p" && board[y+card.y[i]*flip][x+card.x[i]*flip] != "S$p"){
+                return 1
+            }
+        }
+        return 0
+    }
+
 }
 
 //card1 = card2.also {card2 = card1}

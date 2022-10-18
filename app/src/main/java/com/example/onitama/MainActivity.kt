@@ -161,6 +161,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun pickCard(v: View){
+        //highlight dan pilih kartu
         var card = findViewById<ImageView>(v.id)
         if(board.turn == "P1"){
             if(card.id == iv_player1_card1.id){
@@ -234,6 +235,8 @@ class MainActivity : AppCompatActivity() {
                 print_to_board()
                 tileP = -1
                 cekMenang(lokasi[1].toInt(),lokasi[0].toInt())
+                cekLegal()
+                pickedCard = -1
             }
             else{ //highlight legal tiles
                 colorTile()
@@ -272,6 +275,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun nextPlace(b: ArrayList<ArrayList<String>>, x:Int, y:Int):ArrayList<ArrayList<String>>{
+        //gerakan pawn ke tile yang dipilih
         var curTile = tiles[tileP].tag.toString().split(",")
         var xc = curTile[1].toInt()
         var yc = curTile[0].toInt()
@@ -282,6 +286,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     fun cekMenang(x:Int, y:Int){
+        //lakukan cek kondisi menang
         val kondisi = board.cekKondisi()
         if(kondisi == "P1" || kondisi == "P2"){
             tiles[getTile(x,y)].setBackgroundColor(resources.getColor(R.color.teal_200))
@@ -293,7 +298,24 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    fun cekLegal(){
+        //lakukan pengecekan apabila turn player masih ada move legal
+        if(!board.cekLegal()){
+            Toast.makeText(this, "No Legal Moves! Next Turn...", Toast.LENGTH_SHORT).show()
+            Handler().postDelayed({
+                if(board.turn == "P1"){
+                    board.turn = "P2"
+                }
+                else{
+                    board.turn = "P1"
+                }
+                print_to_board()
+            },1500)
+        }
+    }
+
     override fun onRestart() {
+        //waktu finish kembali sini ulangi game
         super.onRestart()
         startGame()
     }
