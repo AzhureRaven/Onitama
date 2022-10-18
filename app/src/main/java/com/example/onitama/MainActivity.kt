@@ -5,6 +5,8 @@ import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -318,6 +320,22 @@ class MainActivity : AppCompatActivity() {
         //waktu finish kembali sini ulangi game
         super.onRestart()
         startGame()
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.option_menu,menu)
+        return super.onCreateOptionsMenu(menu)
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        when(item.itemId){
+            R.id.optRestart->{
+                startGame()
+            }
+            else->{
+            }
+        }
+        return super.onOptionsItemSelected(item)
     }
 
 }
