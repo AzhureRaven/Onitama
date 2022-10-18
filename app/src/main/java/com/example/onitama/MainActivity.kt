@@ -2,8 +2,10 @@ package com.example.onitama
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
 import android.widget.ImageView
+import android.widget.LinearLayout
 import android.widget.Toast
 import com.example.onitama.card.*
 import kotlin.random.Random
@@ -17,6 +19,10 @@ class MainActivity : AppCompatActivity() {
     lateinit var iv_middle_card: ImageView
     lateinit var board: Board
     lateinit var tiles:ArrayList<Button>
+    //lateinit var linearP1: LinearLayout
+    //lateinit var linearP2: LinearLayout
+
+    var pickedCard = -1 //pilih kartu yang mana sesuai turn
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -25,6 +31,8 @@ class MainActivity : AppCompatActivity() {
         iv_player2_card1 = findViewById(R.id.iv_player2_card1)
         iv_player2_card2 = findViewById(R.id.iv_player2_card2)
         iv_middle_card = findViewById(R.id.iv_middle_card)
+        //linearP1 = findViewById(R.id.linearLayout3)
+        //linearP2 = findViewById(R.id.linearLayout2)
         tiles= ArrayList()
         for(i in 1..5){
             for(j in 1..5){
@@ -82,17 +90,14 @@ class MainActivity : AppCompatActivity() {
         //fungsi untuk print board ke UI
 
         //print board
-        val b = board.board
         var counter=0
         for (i in 2..6) {
             for (j in 2..6) {
-                tiles.get(counter).setText(b[i][j])
-                if(counter == 2) tiles.get(counter).setBackgroundColor(resources.getColor(R.color.p2))
-                else if (counter == 22) tiles.get(counter).setBackgroundColor(resources.getColor(R.color.p1))
-                else tiles.get(counter).setBackgroundColor(resources.getColor(R.color.normal))
+                tiles.get(counter).setText(board.board[i][j])
                 counter++
             }
         }
+        colorTile()
 
         //print cards
         var resourcesID = this.resources.getIdentifier(board.cardP1[0].img, "drawable", packageName)
@@ -105,5 +110,98 @@ class MainActivity : AppCompatActivity() {
         iv_player2_card2.setImageResource(resourcesID)
         resourcesID = this.resources.getIdentifier(board.cardM.img, "drawable", packageName)
         iv_middle_card.setImageResource(resourcesID)
+
+        //print turn
+        printTurn()
+    }
+
+    fun printTurn(){
+        //print highlight turn siapa
+        if(board.turn == "P1"){
+            iv_player1_card1.setBackgroundColor(resources.getColor(R.color.p1))
+            iv_player1_card2.setBackgroundColor(resources.getColor(R.color.p1))
+            iv_player2_card1.setBackgroundColor(resources.getColor(R.color.background))
+            iv_player2_card2.setBackgroundColor(resources.getColor(R.color.background))
+        }
+        else{
+            iv_player1_card1.setBackgroundColor(resources.getColor(R.color.p2))
+            iv_player1_card2.setBackgroundColor(resources.getColor(R.color.p2))
+            iv_player1_card1.setBackgroundColor(resources.getColor(R.color.background))
+            iv_player1_card2.setBackgroundColor(resources.getColor(R.color.background))
+        }
+    }
+
+    fun colorTile(){
+        //color tile default
+        var counter=0
+        for (i in 2..6) {
+            for (j in 2..6) {
+                if(counter == 2) tiles.get(counter).setBackgroundColor(resources.getColor(R.color.p2))
+                else if (counter == 22) tiles.get(counter).setBackgroundColor(resources.getColor(R.color.p1))
+                else tiles.get(counter).setBackgroundColor(resources.getColor(R.color.normal))
+                counter++
+            }
+        }
+    }
+
+    fun getTile(x: Int, y: Int): Int{
+        //mendapatkan index tile dari koordinat di board.board
+        var counter=0
+        for (i in 2..6) {
+            for (j in 2..6) {
+                if(i == x && j == y) return counter
+                else counter++
+            }
+        }
+        return -1
+    }
+
+    fun pickCard(v: View){
+        var card = findViewById<ImageView>(v.id)
+        if(board.turn == "P1"){
+            if(card.id == iv_player1_card1.id){
+                pickedCard = 0
+            }
+            else if(card.id == iv_player1_card2.id){
+                pickedCard = 1
+            }
+            else{
+                pickedCard = -1
+                Toast.makeText(this, "Not P2 Turn", Toast.LENGTH_SHORT).show()
+            }
+        }
+        else{
+            if(card.id == iv_player2_card1.id){
+                pickedCard = 0
+            }
+            else if(card.id == iv_player2_card2.id){
+                pickedCard = 1
+            }
+            else{
+                pickedCard = -1
+                Toast.makeText(this, "Not P1 Turn", Toast.LENGTH_SHORT).show()
+            }
+        }
+        colorCard()
+    }
+
+    fun colorCard(){
+        printTurn()
+        if(board.turn == "P1"){
+            if(pickedCard == 0){
+                iv_player1_card1.setBackgroundColor(resources.getColor(R.color.highlight))
+            }
+            else if(pickedCard == 1){
+                iv_player1_card2.setBackgroundColor(resources.getColor(R.color.highlight))
+            }
+        }
+        else{
+            if(pickedCard == 0){
+                iv_player2_card1.setBackgroundColor(resources.getColor(R.color.highlight))
+            }
+            else if(pickedCard == 1){
+                iv_player2_card2.setBackgroundColor(resources.getColor(R.color.highlight))
+            }
+        }
     }
 }
