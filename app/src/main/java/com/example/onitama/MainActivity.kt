@@ -1,7 +1,10 @@
 package com.example.onitama
 
+import android.content.Intent
+import android.graphics.drawable.ColorDrawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
@@ -43,7 +46,6 @@ class MainActivity : AppCompatActivity() {
         }
 
         startGame()
-        print_to_board()
         //card = HorseCard()
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
@@ -85,6 +87,8 @@ class MainActivity : AppCompatActivity() {
             cards.removeAt(idx)
         }
         board = Board(b, arrayListOf(c[0],c[1]),arrayListOf(c[2],c[3]),c[4],"P1")
+
+        print_to_board()
     }
     fun print_to_board(){
         //fungsi untuk print board ke UI
@@ -124,8 +128,8 @@ class MainActivity : AppCompatActivity() {
             iv_player2_card2.setBackgroundColor(resources.getColor(R.color.background))
         }
         else{
-            iv_player1_card1.setBackgroundColor(resources.getColor(R.color.p2))
-            iv_player1_card2.setBackgroundColor(resources.getColor(R.color.p2))
+            iv_player2_card1.setBackgroundColor(resources.getColor(R.color.p2))
+            iv_player2_card2.setBackgroundColor(resources.getColor(R.color.p2))
             iv_player1_card1.setBackgroundColor(resources.getColor(R.color.background))
             iv_player1_card2.setBackgroundColor(resources.getColor(R.color.background))
         }
@@ -149,7 +153,7 @@ class MainActivity : AppCompatActivity() {
         var counter=0
         for (i in 2..6) {
             for (j in 2..6) {
-                if(i == x && j == y) return counter
+                if(j == x && i == y) return counter
                 else counter++
             }
         }
@@ -206,26 +210,92 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var tileP = -1
+    var highlightedTiles = ArrayList<Button>()
+
     fun clickTile(v: View){
-        colorTile()
-        if(pickedCard > -1){
+        if(pickedCard > -1){ //lakukan move
             var button = findViewById<Button>(v.id)
-            var lokasi = button.tag.toString().split(",")
-            var tileP = getTile(lokasi[0].toInt(),lokasi[1].toInt())
-            if(board.turn == "P1"){
-                if(button.text == "M1" || button.text == "S1"){
-
+            var lokasi = button.tag.toString().split(",")//tag: y,x
+            if(highlightedTiles.contains(button)){
+                //Toast.makeText(this, "highlight", Toast.LENGTH_SHORT).show()
+                val newB = nextPlace(board.board,lokasi[1].toInt(),lokasi[0].toInt())
+                val curCard = pickedCard
+                pickedCard = 1 - pickedCard
+                if(board.turn == "P1"){
+                    board = Board(newB, arrayListOf(board.cardP1[pickedCard],board.cardM),
+                        arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardP1[curCard],"P2")
                 }
+                else{
+                    board = Board(newB, arrayListOf(board.cardP1[0],board.cardP1[1]),
+                        arrayListOf(board.cardP2[pickedCard],board.cardM),
+                        board.cardP2[curCard],"P1")
+                }
+                print_to_board()
+                tileP = -1
+                cekMenang(lokasi[1].toInt(),lokasi[0].toInt())
             }
-            else{
-                if(button.text == "M2" || button.text == "S2"){
-
+            else{ //highlight legal tiles
+                colorTile()
+                highlightedTiles = ArrayList<Button>()
+                if(board.turn == "P1"){
+                    if(button.text == "M1" || button.text == "S1"){
+                        highlight(board.cardP1[pickedCard],lokasi[1].toInt(),lokasi[0].toInt(),"1")
+                        tileP = getTile(lokasi[1].toInt(),lokasi[0].toInt())
+                    }
+                }
+                else{
+                    if(button.text == "M2" || button.text == "S2"){
+                        highlight(board.cardP2[pickedCard],lokasi[1].toInt(),lokasi[0].toInt(),"2")
+                        tileP = getTile(lokasi[1].toInt(),lokasi[0].toInt())
+                    }
                 }
             }
         }
         else{
             Toast.makeText(this, "Pick Card First", Toast.LENGTH_SHORT).show()
+            colorTile()
         }
-
     }
+
+    fun highlight(card: Card, x:Int, y:Int, p: String){
+        //lakukan highlight dan masukkan button ke highligted button
+        var flip = 1
+        if(p == "2") flip = -1
+        for (i in 0..card.size-1){
+            var ctr = getTile(x+card.x[i]*flip,y+card.y[i]*flip)
+            if(ctr > -1 && tiles[ctr].text != "M$p" && tiles[ctr].text != "S$p") {
+                tiles[ctr].setBackgroundColor(resources.getColor(R.color.highlight))
+                highlightedTiles.add(tiles[ctr])
+            }
+        }
+    }
+
+    fun nextPlace(b: ArrayList<ArrayList<String>>, x:Int, y:Int):ArrayList<ArrayList<String>>{
+        var curTile = tiles[tileP].tag.toString().split(",")
+        var xc = curTile[1].toInt()
+        var yc = curTile[0].toInt()
+        var newB =  ArrayList<ArrayList<String>>(b)
+        newB[y][x] = newB[yc][xc]
+        newB[yc][xc] = " "
+        return newB
+    }
+
+    fun cekMenang(x:Int, y:Int){
+        val kondisi = board.cekKondisi()
+        if(kondisi == "P1" || kondisi == "P2"){
+            tiles[getTile(x,y)].setBackgroundColor(resources.getColor(R.color.teal_200))
+            Handler().postDelayed({
+                val intent = Intent(this, ResultActivity::class.java)
+                intent.putExtra("win", kondisi)
+                startActivity(intent)
+            },2000)
+        }
+    }
+
+    override fun onRestart() {
+        super.onRestart()
+        startGame()
+    }
+
 }
