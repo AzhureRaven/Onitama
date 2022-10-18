@@ -4,4 +4,10 @@
     <item
         android:id="@+id/optRestart"
         android:title="Restart Game" />
+    <item
+        android:id="@+id/optPlayer"
+        android:title="Play Against Player 2" />
+    <item
+        android:id="@+id/optAI"
+        android:title="Play Against AI" />
 </menu>

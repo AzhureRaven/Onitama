@@ -7,5 +7,6 @@ class EelCard: Card() {
         this.y = arrayListOf(-1, 1, 0)
         this.img = "eel"
         this.size = x.size
+        this.stamp = "P1"
     }
 }

@@ -7,5 +7,6 @@ class CrabCard:Card() {
         this.y = arrayListOf(0, -1, 0)
         this.img = "crab"
         this.size = x.size
+        this.stamp = "P1"
     }
 }

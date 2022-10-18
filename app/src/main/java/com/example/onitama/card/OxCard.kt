@@ -7,5 +7,6 @@ class OxCard: Card() {
         this.y = arrayListOf(-1, 1, 0)
         this.img = "ox"
         this.size = x.size
+        this.stamp = "P1"
     }
 }

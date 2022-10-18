@@ -24,6 +24,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var iv_middle_card: ImageView
     lateinit var board: Board
     lateinit var tiles:ArrayList<Button>
+    var mode = "P2"
     //lateinit var linearP1: LinearLayout
     //lateinit var linearP2: LinearLayout
 
@@ -88,7 +89,7 @@ class MainActivity : AppCompatActivity() {
             c.add(cards.get(idx))
             cards.removeAt(idx)
         }
-        board = Board(b, arrayListOf(c[0],c[1]),arrayListOf(c[2],c[3]),c[4],"P1")
+        board = Board(b, arrayListOf(c[0],c[1]),arrayListOf(c[2],c[3]),c[4],c[4].stamp)
 
         print_to_board()
     }
@@ -289,11 +290,12 @@ class MainActivity : AppCompatActivity() {
 
     fun cekMenang(x:Int, y:Int){
         //lakukan cek kondisi menang
-        val kondisi = board.cekKondisi()
+        var kondisi = board.cekKondisi()
         if(kondisi == "P1" || kondisi == "P2"){
             tiles[getTile(x,y)].setBackgroundColor(resources.getColor(R.color.teal_200))
             Handler().postDelayed({
                 val intent = Intent(this, ResultActivity::class.java)
+                if(kondisi == "P2" && mode=="AI") kondisi = "AI"
                 intent.putExtra("win", kondisi)
                 startActivity(intent)
             },2000)
@@ -330,6 +332,14 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.optRestart->{
+                startGame()
+            }
+            R.id.optPlayer->{
+                mode = "P2"
+                startGame()
+            }
+            R.id.optAI->{
+                mode = "AI"
                 startGame()
             }
             else->{

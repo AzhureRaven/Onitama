@@ -7,5 +7,6 @@ class TigerCard:Card() {
         this.y = arrayListOf(-2, 1)
         this.img = "tiger"
         this.size = x.size
+        this.stamp = "P1"
     }
 }

@@ -7,5 +7,6 @@ class CraneCard: Card() {
         this.y = arrayListOf(-1, 1, 1)
         this.img = "crane"
         this.size = x.size
+        this.stamp = "P1"
     }
 }
