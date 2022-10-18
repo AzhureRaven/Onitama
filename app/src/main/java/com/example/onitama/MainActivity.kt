@@ -183,6 +183,7 @@ class MainActivity : AppCompatActivity() {
             }
         }
         colorCard()
+        colorTile()
     }
 
     fun colorCard(){
@@ -203,5 +204,28 @@ class MainActivity : AppCompatActivity() {
                 iv_player2_card2.setBackgroundColor(resources.getColor(R.color.highlight))
             }
         }
+    }
+
+    fun clickTile(v: View){
+        colorTile()
+        if(pickedCard > -1){
+            var button = findViewById<Button>(v.id)
+            var lokasi = button.tag.toString().split(",")
+            var tileP = getTile(lokasi[0].toInt(),lokasi[1].toInt())
+            if(board.turn == "P1"){
+                if(button.text == "M1" || button.text == "S1"){
+
+                }
+            }
+            else{
+                if(button.text == "M2" || button.text == "S2"){
+
+                }
+            }
+        }
+        else{
+            Toast.makeText(this, "Pick Card First", Toast.LENGTH_SHORT).show()
+        }
+
     }
 }
