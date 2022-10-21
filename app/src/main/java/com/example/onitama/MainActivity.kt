@@ -12,6 +12,8 @@ import android.widget.Button
 import android.widget.ImageView
 import android.widget.LinearLayout
 import android.widget.Toast
+import androidx.activity.result.ActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
 import com.example.onitama.card.*
 import kotlin.random.Random
 
@@ -25,6 +27,8 @@ class MainActivity : AppCompatActivity() {
     lateinit var board: Board
     lateinit var tiles:ArrayList<Button>
     var mode = "P2"
+    var ply = 3
+    var game = true
     //lateinit var linearP1: LinearLayout
     //lateinit var linearP2: LinearLayout
 
@@ -48,12 +52,16 @@ class MainActivity : AppCompatActivity() {
             }
         }
 
+        mode = intent.getStringExtra("mode").toString();
+        ply = intent.getIntExtra("ply",3).toString().toInt();
+
         startGame()
         //card = HorseCard()
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
     fun startGame(){
         //function untuk start game
+        game = true
         val cards = ArrayList<Card>()
         cards.add(TigerCard())
         cards.add(CrabCard())
@@ -165,33 +173,35 @@ class MainActivity : AppCompatActivity() {
 
     fun pickCard(v: View){
         //highlight dan pilih kartu
-        var card = findViewById<ImageView>(v.id)
-        if(board.turn == "P1"){
-            if(card.id == iv_player1_card1.id){
-                pickedCard = 0
-            }
-            else if(card.id == iv_player1_card2.id){
-                pickedCard = 1
-            }
-            else{
-                pickedCard = -1
-                Toast.makeText(this, "Not P2 Turn", Toast.LENGTH_SHORT).show()
-            }
-        }
-        else{
-            if(card.id == iv_player2_card1.id){
-                pickedCard = 0
-            }
-            else if(card.id == iv_player2_card2.id){
-                pickedCard = 1
+        if(game){
+            var card = findViewById<ImageView>(v.id)
+            if(board.turn == "P1"){
+                if(card.id == iv_player1_card1.id){
+                    pickedCard = 0
+                }
+                else if(card.id == iv_player1_card2.id){
+                    pickedCard = 1
+                }
+                else{
+                    pickedCard = -1
+                    Toast.makeText(this, "Not P2 Turn", Toast.LENGTH_SHORT).show()
+                }
             }
             else{
-                pickedCard = -1
-                Toast.makeText(this, "Not P1 Turn", Toast.LENGTH_SHORT).show()
+                if(card.id == iv_player2_card1.id){
+                    pickedCard = 0
+                }
+                else if(card.id == iv_player2_card2.id){
+                    pickedCard = 1
+                }
+                else{
+                    pickedCard = -1
+                    Toast.makeText(this, "Not P1 Turn", Toast.LENGTH_SHORT).show()
+                }
             }
+            colorCard()
+            colorTile()
         }
-        colorCard()
-        colorTile()
     }
 
     fun colorCard(){
@@ -288,17 +298,25 @@ class MainActivity : AppCompatActivity() {
         return newB
     }
 
+    val launcher = registerForActivityResult(ActivityResultContracts.StartActivityForResult()){
+            result: ActivityResult ->
+        if(result.resultCode == RESULT_OK){
+            finish()
+        }
+    }
+
     fun cekMenang(x:Int, y:Int){
         //lakukan cek kondisi menang
         var kondisi = board.cekKondisi()
         if(kondisi == "P1" || kondisi == "P2"){
+            game = false
             tiles[getTile(x,y)].setBackgroundColor(resources.getColor(R.color.teal_200))
             Handler().postDelayed({
                 val intent = Intent(this, ResultActivity::class.java)
                 if(kondisi == "P2" && mode=="AI") kondisi = "AI"
                 intent.putExtra("win", kondisi)
-                startActivity(intent)
-            },2000)
+                launcher.launch(intent)
+            },1500)
         }
     }
 
@@ -331,6 +349,9 @@ class MainActivity : AppCompatActivity() {
 
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
+            R.id.optMenu->{
+                finish()
+            }
             R.id.optRestart->{
                 startGame()
             }

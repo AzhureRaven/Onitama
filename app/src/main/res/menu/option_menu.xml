@@ -2,6 +2,9 @@
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
 
     <item
+        android:id="@+id/optMenu"
+        android:title="Main Menu" />
+    <item
         android:id="@+id/optRestart"
         android:title="Restart Game" />
     <item

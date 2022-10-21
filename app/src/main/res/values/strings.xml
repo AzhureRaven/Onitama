@@ -1,3 +1,10 @@
 <resources>
     <string name="app_name">Onitama</string>
+    <string-array name="ply">
+        <item>1</item>
+        <item>2</item>
+        <item>3</item>
+        <item>4</item>
+        <item>5</item>
+    </string-array>
 </resources>
