@@ -523,8 +523,44 @@ class MainActivity : AppCompatActivity() {
                 mode = "P2"
                 startGame()
             }
-            R.id.optAI->{
+            R.id.opt1->{
                 mode = "AI"
+                ply = 1
+                startGame()
+            }
+            R.id.opt2->{
+                mode = "AI"
+                ply = 2
+                startGame()
+            }
+            R.id.opt3->{
+                mode = "AI"
+                ply = 3
+                startGame()
+            }
+            R.id.opt4->{
+                mode = "AI"
+                ply = 4
+                startGame()
+            }
+            R.id.opt5->{
+                mode = "AI"
+                ply = 5
+                startGame()
+            }
+            R.id.opt6->{
+                mode = "AI"
+                ply = 6
+                startGame()
+            }
+            R.id.opt7->{
+                mode = "AI"
+                ply = 7
+                startGame()
+            }
+            R.id.opt8->{
+                mode = "AI"
+                ply = 8
                 startGame()
             }
             else->{
