@@ -15,6 +15,10 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.onitama.card.*
+import java.util.*
+import kotlin.collections.ArrayList
+import kotlin.math.max
+import kotlin.math.min
 import kotlin.random.Random
 
 class MainActivity : AppCompatActivity() {
@@ -59,6 +63,106 @@ class MainActivity : AppCompatActivity() {
         //card = HorseCard()
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
+
+    var choiceAI: PriorityQueue<Board> = PriorityQueue()
+    fun AIMove(){
+        if(mode == "AI" && board.turn == "P2"){
+            Toast.makeText(this, "AI Moving", Toast.LENGTH_SHORT).show()
+            choiceAI = PriorityQueue()
+            Toast.makeText(this, "${minimaxab(board,-999,999,ply)}", Toast.LENGTH_SHORT).show()
+            print_to_board()
+        }
+    }
+
+    fun minimaxab(board: Board, a:Int, b:Int, ply:Int): Int{
+        //val board = Board(bd.board,bd.cardP1,bd.cardP2,bd.cardM,bd.turn,bd.histCard,bd.histTile,bd.sbe)
+        var alpha = a
+        var beta = b
+        //cek jika terminal node
+        val terminal = board.cekKondisi()
+        if(terminal == "P1") return -999
+        else if(terminal == "P2") return 999
+        else if(ply <= 0) return board.sbe()
+        else{
+            //buka node
+            if(board.turn == "P1"){ //minimizing
+                //mulai dari setiap master student
+                for (i in 2..6) {
+                    for (j in 2..6) {
+                        if(board.board[i][j] == "M1" || board.board[i][j] == "S1"){
+                            //telusuri kedua card
+                            for(c in 0..1){
+                                //telusuri setiap legal move card
+                                for (m in 0..board.cardP1[c].size-1){
+                                    val newX = j + board.cardP1[c].x[m]
+                                    val newY = i + board.cardP1[c].y[m]
+                                    if(board.board[newY][newX] != "N" && board.board[newY][newX] != "M1" && board.board[newY][newX] != "S1") {
+                                        //lakukan expand node
+                                        val newB = nextPlace(board.board,newX,newY,j,i)
+                                        var pickedCard = c
+                                        val curCard = pickedCard
+                                        pickedCard = 1 - pickedCard
+                                        val newBoard = Board(newB, arrayListOf(board.cardP1[pickedCard],board.cardM),
+                                                arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardP1[curCard],"P2",curCard,getTile(newX,newY))
+                                        val value = minimaxab(newBoard,alpha,beta,ply-1)
+                                        beta = min(beta,value)
+                                        if(beta <= alpha) return beta
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+                return beta
+            }
+            else{ //maximizing
+                //mulai dari setiap master student
+                for (i in 2..6) {
+                    for (j in 2..6) {
+                        if(board.board[i][j] == "M2" || board.board[i][j] == "S2"){
+                            //telusuri kedua card
+                            for(c in 0..1){
+                                //telusuri setiap legal move card
+                                for (m in 0..board.cardP2[c].size-1){
+                                    val newX = j + board.cardP2[c].x[m]*-1
+                                    val newY = i + board.cardP2[c].y[m]*-1
+                                    if(board.board[newY][newX] != "N" && board.board[newY][newX] != "M2" && board.board[newY][newX] != "S2") {
+                                        //lakukan expand node
+                                        val newB = nextPlace(board.board,newX,newY,j,i)
+                                        var pickedCard = c
+                                        val curCard = pickedCard
+                                        pickedCard = 1 - pickedCard
+
+                                        val newBoard = Board(newB, arrayListOf(board.cardP1[0],board.cardP1[1]),
+                                            arrayListOf(board.cardP2[pickedCard],board.cardM),
+                                            board.cardP2[curCard],"P1",curCard,getTile(newX,newY))
+                                        val value = minimaxab(newBoard,alpha,beta,ply-1)
+                                        alpha = max(alpha,value)
+
+                                        if(beta <= alpha) return alpha
+                                    }
+                                }
+
+                            }
+                        }
+                    }
+                }
+                return alpha
+            }
+        }
+        return 0
+    }
+
+    fun printBoard(b: ArrayList<ArrayList<String>>){
+        for (i in 2..6) {
+            for (j in 2..6) {
+                if(b[i][j] == " ") print("  ")
+                else print(b[i][j])
+            }
+            println()
+        }
+    }
+
     fun startGame(){
         //function untuk start game
         game = true
@@ -100,6 +204,7 @@ class MainActivity : AppCompatActivity() {
         board = Board(b, arrayListOf(c[0],c[1]),arrayListOf(c[2],c[3]),c[4],c[4].stamp)
 
         print_to_board()
+        AIMove()
     }
     fun print_to_board(){
         //fungsi untuk print board ke UI
@@ -292,7 +397,47 @@ class MainActivity : AppCompatActivity() {
         var curTile = tiles[tileP].tag.toString().split(",")
         var xc = curTile[1].toInt()
         var yc = curTile[0].toInt()
-        var newB =  ArrayList<ArrayList<String>>(b)
+        var newB = arrayListOf<ArrayList<String>>(
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","S2","S2","M2","S2","S2","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N","S1","S1","M1","S1","S1","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+        )
+        for(i in 0..8){
+            for(j in 0..8){
+                newB[i][j] = b[i][j]
+            }
+        }
+        newB[y][x] = newB[yc][xc]
+        newB[yc][xc] = " "
+        return newB
+    }
+
+    fun nextPlace(b: ArrayList<ArrayList<String>>, x:Int, y:Int, xc:Int, yc:Int):ArrayList<ArrayList<String>>{
+        //gerakan pawn ke tile yang dipilih buat AI
+        var newB = arrayListOf<ArrayList<String>>(
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","S2","S2","M2","S2","S2","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N","S1","S1","M1","S1","S1","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+        )
+        //buat baru, dicopy value b satu persatu. Semua cara lain untuk copy data tetep referens yang original sehingga ikut terubah
+        for(i in 0..8){
+            for(j in 0..8){
+                newB[i][j] = b[i][j]
+            }
+        }
+        //var newB: ArrayList<ArrayList<String>> = arrayListOf(b[0],b[1],b[2],b[3],b[4],b[5],b[6],b[7],b[8])
         newB[y][x] = newB[yc][xc]
         newB[yc][xc] = " "
         return newB
@@ -332,7 +477,11 @@ class MainActivity : AppCompatActivity() {
                     board.turn = "P1"
                 }
                 print_to_board()
+                AIMove()
             },1500)
+        }
+        else{
+            AIMove()
         }
     }
 

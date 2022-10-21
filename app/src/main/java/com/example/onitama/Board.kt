@@ -1,13 +1,17 @@
 package com.example.onitama
 
 import com.example.onitama.card.*
+import java.lang.Math.abs
 
 class Board(
     var board: ArrayList<ArrayList<String>>,//array 2d papan
     var cardP1: ArrayList<Card>,//array 2 kartu dipengang player 1
     var cardP2: ArrayList<Card>,//array 2 kartu dipengang player 2
     var cardM: Card,//kartu di sebelah papan
-    var turn: String//turn player sekarang
+    var turn: String,//turn player sekarang
+    var histCard: Int = -1,//index card yang dipilih untuk mendapatkan state Board ini
+    var histTile: Int = -1,//index tile yang dipilih untuk mendapatkan state Board ini
+    var sbe:Int = 0//nilai simpanan sbe
 ) {
 
     override fun toString(): String {
@@ -96,6 +100,53 @@ class Board(
         }
         return 0
     }
+
+    fun sbe(): Int{
+        //lakukan sbe
+        //fitur 1: manhattan distance master ke temple enemy
+        var f1 = 0
+        //P2
+        var x = -1
+        var y = -1
+        for (i in 2..6) {
+            for (j in 2..6) {
+                if(this.board[i][j] == "M2"){
+                    x = j
+                    y = i
+                    break
+                }
+            }
+        }
+        f1 += abs(6 - y) + abs(4 - x)
+        //P1
+        for (i in 2..6) {
+            for (j in 2..6) {
+                if(this.board[i][j] == "M1"){
+                    x = j
+                    y = i
+                    break
+                }
+            }
+        }
+        f1 -= abs(2 - y) + abs(4 - x)
+
+        //fitur 2: jumlah student
+        var f2 = 0
+        for (i in 2..6) {
+            for (j in 2..6) {
+                if(this.board[i][j] == "S1"){
+                    f2++
+                }
+                else if(this.board[i][j] == "S1"){
+                    f2--
+                }
+            }
+        }
+
+        //apply weight dan return value
+        return f1*2 + f2*5
+    }
+
 
 }
 
