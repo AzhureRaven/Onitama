@@ -10,7 +10,8 @@ class Board(
     var cardM: Card,//kartu di sebelah papan
     var turn: String,//turn player sekarang
     var histCard: Int = -1,//index card yang dipilih untuk mendapatkan state Board ini
-    var histTile: Int = -1,//index tile yang dipilih untuk mendapatkan state Board ini
+    var histTile1: Int = -1,//index tile yang dipilih untuk mendapatkan state Board ini
+    var histTile2: Int = -1,//index tile next yang dipilih untuk mendapatkan state Board ini
     var sbe:Int = 0//nilai simpanan sbe
 ) {
 

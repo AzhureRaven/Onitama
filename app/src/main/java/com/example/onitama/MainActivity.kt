@@ -17,6 +17,7 @@ import androidx.activity.result.contract.ActivityResultContracts
 import com.example.onitama.card.*
 import java.util.*
 import kotlin.collections.ArrayList
+import kotlin.concurrent.schedule
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -64,13 +65,26 @@ class MainActivity : AppCompatActivity() {
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
 
-    var choiceAI: PriorityQueue<Board> = PriorityQueue()
+    var choiceAI: ArrayList<Board> = ArrayList()
     fun AIMove(){
-        if(mode == "AI" && board.turn == "P2"){
+        if(mode == "AI" && board.turn == "P2" && game){
             Toast.makeText(this, "AI Moving", Toast.LENGTH_SHORT).show()
-            choiceAI = PriorityQueue()
-            Toast.makeText(this, "${minimaxab(board,-999,999,ply)}", Toast.LENGTH_SHORT).show()
-            print_to_board()
+            choiceAI = ArrayList()
+            val choice = minimaxab(board,-999,999,ply)
+            var histTile1=0
+            var histTile2=0
+            for(ch in choiceAI){
+                if(ch.sbe == choice){
+                    pickedCard = ch.histCard
+                    histTile1 = ch.histTile1
+                    histTile2 = ch.histTile2
+                    break
+                }
+            }
+            //lakukan simulated click
+            colorCard()
+            tiles[histTile1].performClick()
+            tiles[histTile2].performClick()
         }
     }
 
@@ -103,7 +117,7 @@ class MainActivity : AppCompatActivity() {
                                         val curCard = pickedCard
                                         pickedCard = 1 - pickedCard
                                         val newBoard = Board(newB, arrayListOf(board.cardP1[pickedCard],board.cardM),
-                                                arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardP1[curCard],"P2",curCard,getTile(newX,newY))
+                                                arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardP1[curCard],"P2",curCard,getTile(j,i),getTile(newX,newY))
                                         val value = minimaxab(newBoard,alpha,beta,ply-1)
                                         beta = min(beta,value)
                                         if(beta <= alpha) return beta
@@ -135,9 +149,13 @@ class MainActivity : AppCompatActivity() {
 
                                         val newBoard = Board(newB, arrayListOf(board.cardP1[0],board.cardP1[1]),
                                             arrayListOf(board.cardP2[pickedCard],board.cardM),
-                                            board.cardP2[curCard],"P1",curCard,getTile(newX,newY))
+                                            board.cardP2[curCard],"P1",curCard,getTile(j,i),getTile(newX,newY))
                                         val value = minimaxab(newBoard,alpha,beta,ply-1)
                                         alpha = max(alpha,value)
+                                        if(ply == this.ply){
+                                            newBoard.sbe = alpha
+                                            choiceAI.add(newBoard)
+                                        }
 
                                         if(beta <= alpha) return alpha
                                     }
@@ -278,7 +296,7 @@ class MainActivity : AppCompatActivity() {
 
     fun pickCard(v: View){
         //highlight dan pilih kartu
-        if(game){
+        if(game && (board.turn =="P1" || mode=="P2")){
             var card = findViewById<ImageView>(v.id)
             if(board.turn == "P1"){
                 if(card.id == iv_player1_card1.id){
@@ -448,6 +466,9 @@ class MainActivity : AppCompatActivity() {
         if(result.resultCode == RESULT_OK){
             finish()
         }
+        else{
+            startGame()
+        }
     }
 
     fun cekMenang(x:Int, y:Int){
@@ -483,12 +504,6 @@ class MainActivity : AppCompatActivity() {
         else{
             AIMove()
         }
-    }
-
-    override fun onRestart() {
-        //waktu finish kembali sini ulangi game
-        super.onRestart()
-        startGame()
     }
 
     override fun onCreateOptionsMenu(menu: Menu): Boolean {
