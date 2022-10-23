@@ -60,10 +60,15 @@ class MainActivity : AppCompatActivity() {
         mode = intent.getStringExtra("mode").toString();
         ply = intent.getIntExtra("ply",3).toString().toInt();
 
-        startGame()
         //card = HorseCard()
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
+
+    override fun onStart() {
+        super.onStart()
+        startGame()
+    }
+
 
     var choiceAI: ArrayList<Board> = ArrayList()
     fun AIMove(){
@@ -88,6 +93,7 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var AIlegal = 0
     fun minimaxab(board: Board, a:Int, b:Int, ply:Int): Int{
         //val board = Board(bd.board,bd.cardP1,bd.cardP2,bd.cardM,bd.turn,bd.histCard,bd.histTile,bd.sbe)
         var alpha = a
@@ -99,6 +105,7 @@ class MainActivity : AppCompatActivity() {
         else if(ply <= 0) return board.sbe()
         else{
             //buka node
+            var noMove = true
             if(board.turn == "P1"){ //minimizing
                 //mulai dari setiap master student
                 for (i in 2..6) {
@@ -112,6 +119,7 @@ class MainActivity : AppCompatActivity() {
                                     val newY = i + board.cardP1[c].y[m]
                                     if(board.board[newY][newX] != "N" && board.board[newY][newX] != "M1" && board.board[newY][newX] != "S1") {
                                         //lakukan expand node
+                                        noMove = false
                                         val newB = nextPlace(board.board,newX,newY,j,i)
                                         var pickedCard = c
                                         val curCard = pickedCard
@@ -120,12 +128,23 @@ class MainActivity : AppCompatActivity() {
                                                 arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardP1[curCard],"P2",curCard,getTile(j,i),getTile(newX,newY))
                                         val value = minimaxab(newBoard,alpha,beta,ply-1)
                                         beta = min(beta,value)
+                                        if(ply == this.ply){
+                                            newBoard.sbe = alpha
+                                            choiceAI.add(newBoard)
+                                        }
                                         if(beta <= alpha) return beta
                                     }
                                 }
                             }
                         }
                     }
+                }
+                if(noMove){ //jika tidak ada legal move, buka node ke turn berikutnya
+                    val newBoard = Board(board.board, arrayListOf(board.cardP1[0],board.cardP1[1]),
+                        arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardM,"P2")
+                    val value = minimaxab(newBoard,alpha,beta,ply-1)
+                    beta = min(beta,value)
+                    if(beta <= alpha) return beta
                 }
                 return beta
             }
@@ -142,6 +161,7 @@ class MainActivity : AppCompatActivity() {
                                     val newY = i + board.cardP2[c].y[m]*-1
                                     if(board.board[newY][newX] != "N" && board.board[newY][newX] != "M2" && board.board[newY][newX] != "S2") {
                                         //lakukan expand node
+                                        noMove = false
                                         val newB = nextPlace(board.board,newX,newY,j,i)
                                         var pickedCard = c
                                         val curCard = pickedCard
@@ -164,6 +184,13 @@ class MainActivity : AppCompatActivity() {
                             }
                         }
                     }
+                }
+                if(noMove){ //jika tidak ada legal move, buka node ke turn berikutnya
+                    val newBoard = Board(board.board, arrayListOf(board.cardP1[0],board.cardP1[1]),
+                        arrayListOf(board.cardP2[0],board.cardP2[1]),board.cardM,"P2")
+                    val value = minimaxab(newBoard,alpha,beta,ply-1)
+                    alpha = max(beta,value)
+                    if(beta <= alpha) return alpha
                 }
                 return alpha
             }
@@ -486,23 +513,37 @@ class MainActivity : AppCompatActivity() {
         }
     }
 
+    var legal = 0
     fun cekLegal(){
         //lakukan pengecekan apabila turn player masih ada move legal
         if(!board.cekLegal()){
             Toast.makeText(this, "No Legal Moves! Next Turn...", Toast.LENGTH_SHORT).show()
-            Handler().postDelayed({
-                if(board.turn == "P1"){
-                    board.turn = "P2"
-                }
-                else{
-                    board.turn = "P1"
-                }
-                print_to_board()
-                AIMove()
-            },1500)
+            legal++
+            if(legal>=2){ //kalau kedua player gak bisa gerak
+                game = false
+                Toast.makeText(this, "No More Legal Moves! Game Over!", Toast.LENGTH_SHORT).show()
+                Handler().postDelayed({
+                    val intent = Intent(this, ResultActivity::class.java)
+                    intent.putExtra("win", "No One")
+                    launcher.launch(intent)
+                },1500)
+            }
+            else{
+                Handler().postDelayed({
+                    if(board.turn == "P1"){
+                        board.turn = "P2"
+                    }
+                    else{
+                        board.turn = "P1"
+                    }
+                    print_to_board()
+                    AIMove()
+                },1500)
+            }
         }
         else{
             AIMove()
+            legal = 0
         }
     }
 
