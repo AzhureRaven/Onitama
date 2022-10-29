@@ -63,6 +63,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="2,2"
                 android:textColor="@color/black" />
 
@@ -75,6 +76,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="2,3"
                 android:textColor="@color/black" />
 
@@ -87,6 +89,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#E91E63"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="2,4"
                 android:textColor="@color/black" />
 
@@ -99,6 +102,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="2,5"
                 android:textColor="@color/black" />
 
@@ -111,6 +115,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="2,6"
                 android:textColor="@color/black" />
         </LinearLayout>
@@ -129,6 +134,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="3,2"
                 android:textColor="@color/black" />
 
@@ -141,6 +147,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="3,3"
                 android:textColor="@color/black" />
 
@@ -153,6 +160,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="3,4"
                 android:textColor="@color/black" />
 
@@ -165,6 +173,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="3,5"
                 android:textColor="@color/black" />
 
@@ -177,6 +186,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="3,6"
                 android:textColor="@color/black" />
         </LinearLayout>
@@ -195,6 +205,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="4,2"
                 android:textColor="@color/black" />
 
@@ -207,6 +218,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="4,3"
                 android:textColor="@color/black" />
 
@@ -219,6 +231,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="4,4"
                 android:textColor="@color/black" />
 
@@ -231,6 +244,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="4,5"
                 android:textColor="@color/black" />
 
@@ -243,6 +257,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="4,6"
                 android:textColor="@color/black" />
         </LinearLayout>
@@ -261,6 +276,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="5,2"
                 android:textColor="@color/black" />
 
@@ -273,6 +289,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="5,3"
                 android:textColor="@color/black" />
 
@@ -285,6 +302,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="5,4"
                 android:textColor="@color/black" />
 
@@ -297,6 +315,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="5,5"
                 android:textColor="@color/black" />
 
@@ -309,6 +328,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="5,6"
                 android:textColor="@color/black" />
         </LinearLayout>
@@ -327,6 +347,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="6,2"
                 android:textColor="@color/black" />
 
@@ -339,6 +360,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="6,3"
                 android:textColor="@color/black" />
 
@@ -351,6 +373,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#3700B3"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="6,4"
                 android:textColor="@color/black" />
 
@@ -363,6 +386,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="6,5"
                 android:textColor="@color/black" />
 
@@ -375,6 +399,7 @@
                 android:layout_weight="1"
                 android:backgroundTint="#dfd7d4"
                 android:onClick="clickTile"
+                android:padding="0dp"
                 android:tag="6,6"
                 android:textColor="@color/black" />
         </LinearLayout>

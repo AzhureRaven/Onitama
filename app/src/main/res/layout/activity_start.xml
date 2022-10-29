@@ -56,7 +56,9 @@
         android:layout_height="56dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
+        android:backgroundTint="#000000"
         android:entries="@array/ply"
+        android:theme="@style/spinnerTheme"
         app:layout_constraintStart_toEndOf="@+id/btnAI"
         app:layout_constraintTop_toBottomOf="@+id/btnP2" />
 

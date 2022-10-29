@@ -30,7 +30,7 @@ class MainActivity : AppCompatActivity() {
     lateinit var iv_player1_card2: ImageView
     lateinit var iv_middle_card: ImageView
     lateinit var board: Board
-    lateinit var tiles:ArrayList<Button>
+    val tiles:ArrayList<Button> = ArrayList()
     var mode = "P2"
     var ply = 3
     var game = true
@@ -48,7 +48,6 @@ class MainActivity : AppCompatActivity() {
         iv_middle_card = findViewById(R.id.iv_middle_card)
         //linearP1 = findViewById(R.id.linearLayout3)
         //linearP2 = findViewById(R.id.linearLayout2)
-        tiles= ArrayList()
         for(i in 1..5){
             for(j in 1..5){
                 val tileID = "x$j"+"y$i"
@@ -56,6 +55,7 @@ class MainActivity : AppCompatActivity() {
                 tiles.add(findViewById(resourcesID))
             }
         }
+        Toast.makeText(this, "${tiles.size}", Toast.LENGTH_SHORT).show()
 
         mode = intent.getStringExtra("mode").toString();
         ply = intent.getIntExtra("ply",3).toString().toInt();
@@ -76,6 +76,7 @@ class MainActivity : AppCompatActivity() {
             Toast.makeText(this, "AI Moving", Toast.LENGTH_SHORT).show()
             choiceAI.clear()
             val choice = minimaxab(board,-999,999,ply)
+            Toast.makeText(this, "$choice", Toast.LENGTH_SHORT).show()
             var histTile1=0
             var histTile2=0
             for(ch in choiceAI){
@@ -91,8 +92,8 @@ class MainActivity : AppCompatActivity() {
 
             //lakukan simulated click
             colorCard()
-            tiles[histTile1].performClick()
-            tiles[histTile2].performClick()
+            if(histTile1>-1 && histTile1<tiles.size) tiles[histTile1].performClick()
+            if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
         }
     }
 
@@ -379,6 +380,7 @@ class MainActivity : AppCompatActivity() {
 
     fun colorCard(){
         printTurn()
+        highlightedTiles.clear()
         if(board.turn == "P1"){
             if(pickedCard == 0){
                 iv_player1_card1.setBackgroundColor(resources.getColor(R.color.highlight))
@@ -398,7 +400,7 @@ class MainActivity : AppCompatActivity() {
     }
 
     var tileP = -1
-    var highlightedTiles = ArrayList<Button>()
+    val highlightedTiles = ArrayList<Button>()
 
     fun clickTile(v: View){
         if(pickedCard > -1){ //lakukan move
@@ -423,10 +425,11 @@ class MainActivity : AppCompatActivity() {
                 cekMenang(lokasi[1].toInt(),lokasi[0].toInt())
                 cekLegal()
                 pickedCard = -1
+                highlightedTiles.clear()
             }
             else{ //highlight legal tiles
                 colorTile()
-                highlightedTiles = ArrayList<Button>()
+                highlightedTiles.clear()
                 if(board.turn == "P1"){
                     if(button.text == "M1" || button.text == "S1"){
                         highlight(board.cardP1[pickedCard],lokasi[1].toInt(),lokasi[0].toInt(),"1")
@@ -449,6 +452,7 @@ class MainActivity : AppCompatActivity() {
 
     fun highlight(card: Card, x:Int, y:Int, p: String){
         //lakukan highlight dan masukkan button ke highligted button
+        highlightedTiles.clear()
         var flip = 1
         if(p == "2") flip = -1
         for (i in 0..card.size-1){
