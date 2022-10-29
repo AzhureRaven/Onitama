@@ -74,7 +74,7 @@ class MainActivity : AppCompatActivity() {
     fun AIMove(){
         if(mode == "AI" && board.turn == "P2" && game){
             Toast.makeText(this, "AI Moving", Toast.LENGTH_SHORT).show()
-            choiceAI = ArrayList()
+            choiceAI.clear()
             val choice = minimaxab(board,-999,999,ply)
             var histTile1=0
             var histTile2=0
@@ -83,14 +83,37 @@ class MainActivity : AppCompatActivity() {
                     pickedCard = ch.histCard
                     histTile1 = ch.histTile1
                     histTile2 = ch.histTile2
+                    //copy(ch)
                     break
                 }
             }
+            choiceAI.clear()
+
             //lakukan simulated click
             colorCard()
             tiles[histTile1].performClick()
             tiles[histTile2].performClick()
         }
+    }
+
+    fun copy(ch:Board){
+        var newB = arrayListOf<ArrayList<String>>(
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","S2","S2","M2","S2","S2","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N"," "," "," "," "," ","N","N"),
+            arrayListOf<String>("N","N","S1","S1","M1","S1","S1","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+            arrayListOf<String>("N","N","N","N","N","N","N","N","N"),
+        )
+        for(i in 0..8){
+            for(j in 0..8){
+                newB[i][j] = ch.board[i][j]
+            }
+        }
+        board = Board(newB, arrayListOf(ch.cardP1[0],ch.cardP1[1]), arrayListOf(ch.cardP2[0],ch.cardP2[1]), ch.cardM, ch.turn)
     }
 
     var AIlegal = 0
