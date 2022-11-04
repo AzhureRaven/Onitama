@@ -55,7 +55,7 @@ class MainActivity : AppCompatActivity() {
                 tiles.add(findViewById(resourcesID))
             }
         }
-        Toast.makeText(this, "${tiles.size}", Toast.LENGTH_SHORT).show()
+        //Toast.makeText(this, "${tiles.size}", Toast.LENGTH_SHORT).show()
 
         mode = intent.getStringExtra("mode").toString();
         ply = intent.getIntExtra("ply",3).toString().toInt();

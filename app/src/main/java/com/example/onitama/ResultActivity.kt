@@ -33,4 +33,5 @@ class ResultActivity : AppCompatActivity() {
         }
 
     }
+
 }
