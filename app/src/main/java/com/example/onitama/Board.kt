@@ -153,8 +153,10 @@ class Board(
                 }
             }
         }
-        if(f2p1 > 0)f3p1 /= f2p1
-        if(f2p2 > 0)f3p2 /= f2p2
+
+        //menghitung average distance student-enemy master. Jika tidak ada student, otomatis highest averga (8)
+        if(f2p1 > 0)f3p1 /= f2p1 else f3p1 = 8
+        if(f2p2 > 0)f3p2 /= f2p2 else f3p2 = 8
 
         //apply weight dan return value
         return (f1p1 - f1p2)*2 + (f2p2*6 - f2p1*2) + (f3p1 - f3p2)*8
