@@ -75,12 +75,14 @@ class MainActivity : AppCompatActivity() {
         if(mode == "AI" && board.turn == "P2" && game){
             Toast.makeText(this, "AI Moving", Toast.LENGTH_SHORT).show()
             choiceAI.clear()
-            val choice = minimaxab(board,-999,999,ply)
+            val choice = minimaxab(board,-999 - (ply - 1),999 + (ply - 1),ply)
             Toast.makeText(this, "$choice", Toast.LENGTH_SHORT).show()
             var histTile1=0
             var histTile2=0
+            //val choices = ArrayList<Board>()
             for(ch in choiceAI){
                 if(ch.sbe == choice){
+                    //choices.add(ch)
                     pickedCard = ch.histCard
                     histTile1 = ch.histTile1
                     histTile2 = ch.histTile2
@@ -88,6 +90,10 @@ class MainActivity : AppCompatActivity() {
                     break
                 }
             }
+            /*val pick = (0..(choices.size-1)).random()
+            pickedCard = choices[pick].histCard
+            histTile1 = choices[pick].histTile1
+            histTile2 = choices[pick].histTile2*/
             choiceAI.clear()
 
             //lakukan simulated click
@@ -124,8 +130,8 @@ class MainActivity : AppCompatActivity() {
         var beta = b
         //cek jika terminal node
         val terminal = board.cekKondisi()
-        if(terminal == "P1") return -999
-        else if(terminal == "P2") return 999
+        if(terminal == "P1") return -999 - ply
+        else if(terminal == "P2") return 999 + ply
         else if(ply <= 0) return board.sbe()
         else{
             //buka node

@@ -105,47 +105,59 @@ class Board(
     fun sbe(): Int{
         //lakukan sbe
         //fitur 1: manhattan distance master ke temple enemy
-        var f1 = 0
         //P2
-        var x = -1
-        var y = -1
+        var f1p2 = 0
+        var mx2 = -1
+        var my2 = -1
         for (i in 2..6) {
             for (j in 2..6) {
                 if(this.board[i][j] == "M2"){
-                    x = j
-                    y = i
+                    mx2 = j
+                    my2 = i
                     break
                 }
             }
         }
-        f1 += abs(6 - y) + abs(4 - x)
+        f1p2 = abs(6 - my2) + abs(4 - mx2)
+
         //P1
+        var f1p1 = 0
+        var mx1 = -1
+        var my1 = -1
         for (i in 2..6) {
             for (j in 2..6) {
                 if(this.board[i][j] == "M1"){
-                    x = j
-                    y = i
+                    mx1 = j
+                    my1 = i
                     break
                 }
             }
         }
-        f1 -= abs(2 - y) + abs(4 - x)
+        f1p1 = abs(2 - my1) + abs(4 - mx1)
 
         //fitur 2: jumlah student
-        var f2 = 0
+        //fitur 3: average manhattan distance student ke enemy master
+        var f2p2 = 0
+        var f2p1 = 0
+        var f3p2 = 0
+        var f3p1 = 0
         for (i in 2..6) {
             for (j in 2..6) {
-                if(this.board[i][j] == "S1"){
-                    f2++
+                if(this.board[i][j] == "S2"){
+                    f2p2++
+                    f3p2 += abs(my1 - i) + abs(mx1 - j)
                 }
                 else if(this.board[i][j] == "S1"){
-                    f2--
+                    f2p1++
+                    f3p1 += abs(my2 - i) + abs(mx2 - j)
                 }
             }
         }
+        if(f2p1 > 0)f3p1 /= f2p1
+        if(f2p2 > 0)f3p2 /= f2p2
 
         //apply weight dan return value
-        return f1*2 + f2*5
+        return (f1p1 - f1p2)*2 + (f2p2*6 - f2p1*2) + (f3p1 - f3p2)*8
     }
 
 
