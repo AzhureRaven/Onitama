@@ -15,6 +15,9 @@ import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import com.example.onitama.card.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.launch
 import java.util.*
 import kotlin.collections.ArrayList
 import kotlin.concurrent.schedule
@@ -34,6 +37,7 @@ class MainActivity : AppCompatActivity() {
     var mode = "P2"
     var ply = 3
     var game = true
+    val coroutine = CoroutineScope(Dispatchers.IO)
     //lateinit var linearP1: LinearLayout
     //lateinit var linearP2: LinearLayout
 
@@ -74,32 +78,36 @@ class MainActivity : AppCompatActivity() {
     fun AIMove(){
         if(mode == "AI" && board.turn == "P2" && game){
             Toast.makeText(this, "AI Moving", Toast.LENGTH_SHORT).show()
-            choiceAI.clear()
-            val choice = minimaxab(board,-999 - (ply - 1),999 + (ply - 1),ply)
-            Toast.makeText(this, "$choice", Toast.LENGTH_SHORT).show()
-            var histTile1=0
-            var histTile2=0
-            //val choices = ArrayList<Board>()
-            for(ch in choiceAI){
-                if(ch.sbe == choice){
-                    //choices.add(ch)
-                    pickedCard = ch.histCard
-                    histTile1 = ch.histTile1
-                    histTile2 = ch.histTile2
-                    //copy(ch)
-                    break
+            coroutine.launch {
+                choiceAI.clear()
+                val choice = minimaxab(board,-999 - (ply - 1),999 + (ply - 1),ply)
+                runOnUiThread {
+                    Toast.makeText(this@MainActivity, "$choice", Toast.LENGTH_SHORT).show()
+                    var histTile1=0
+                    var histTile2=0
+                    //val choices = ArrayList<Board>()
+                    for(ch in choiceAI){
+                        if(ch.sbe == choice){
+                            //choices.add(ch)
+                            pickedCard = ch.histCard
+                            histTile1 = ch.histTile1
+                            histTile2 = ch.histTile2
+                            //copy(ch)
+                            break
+                        }
+                    }
+                    /*val pick = (0..(choices.size-1)).random()
+                    pickedCard = choices[pick].histCard
+                    histTile1 = choices[pick].histTile1
+                    histTile2 = choices[pick].histTile2*/
+                    choiceAI.clear()
+
+                    //lakukan simulated click
+                    colorCard()
+                    if(histTile1>-1 && histTile1<tiles.size) tiles[histTile1].performClick()
+                    if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
                 }
             }
-            /*val pick = (0..(choices.size-1)).random()
-            pickedCard = choices[pick].histCard
-            histTile1 = choices[pick].histTile1
-            histTile2 = choices[pick].histTile2*/
-            choiceAI.clear()
-
-            //lakukan simulated click
-            colorCard()
-            if(histTile1>-1 && histTile1<tiles.size) tiles[histTile1].performClick()
-            if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
         }
     }
 
@@ -123,7 +131,6 @@ class MainActivity : AppCompatActivity() {
         board = Board(newB, arrayListOf(ch.cardP1[0],ch.cardP1[1]), arrayListOf(ch.cardP2[0],ch.cardP2[1]), ch.cardM, ch.turn)
     }
 
-    var AIlegal = 0
     fun minimaxab(board: Board, a:Int, b:Int, ply:Int): Int{
         //val board = Board(bd.board,bd.cardP1,bd.cardP2,bd.cardM,bd.turn,bd.histCard,bd.histTile,bd.sbe)
         var alpha = a
