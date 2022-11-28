@@ -6,6 +6,7 @@ import android.os.Handler
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import android.view.WindowManager
 import android.widget.Button
 import android.widget.ImageView
 import android.widget.Toast
@@ -100,6 +101,8 @@ class MainActivity : AppCompatActivity() {
 
                     //lakukan simulated click
                     val handler = Handler()
+                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                        WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     handler.postDelayed(Runnable {
                         colorCard()
                     }, 750)
@@ -108,6 +111,7 @@ class MainActivity : AppCompatActivity() {
                     }, 1750)
                     handler.postDelayed(Runnable {
                         if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
+                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     }, 2750)
                 }
             }
