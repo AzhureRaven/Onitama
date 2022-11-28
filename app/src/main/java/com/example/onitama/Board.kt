@@ -151,7 +151,9 @@ class Board(
                     f2p1++
                     f3p1 += abs(my2 - i) + abs(mx2 - j)
                 }
+                if(f2p2 == 5 && f2p1 == 5) break
             }
+            if(f2p2 == 5 && f2p1 == 5) break
         }
 
         //menghitung average distance student-enemy master. Jika tidak ada student, otomatis highest averga (8)

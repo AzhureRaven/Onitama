@@ -8,9 +8,9 @@
     tools:context=".MainActivity">
 
     <LinearLayout
-        android:id="@+id/linearLayout2"
+        android:id="@+id/llP2"
         android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginBottom="5dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toTopOf="@+id/linearLayout"
@@ -21,7 +21,7 @@
         <ImageView
             android:id="@+id/iv_player2_card1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="pickCard"
             android:rotation="180"
@@ -30,7 +30,7 @@
         <ImageView
             android:id="@+id/iv_player2_card2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="pickCard"
             android:rotation="180"
@@ -44,10 +44,10 @@
         android:layout_marginStart="8dp"
         android:layout_marginEnd="82dp"
         android:orientation="vertical"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/llP1"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2">
+        app:layout_constraintTop_toBottomOf="@+id/llP2">
 
         <LinearLayout
             android:layout_width="match_parent"
@@ -407,9 +407,9 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/linearLayout3"
+        android:id="@+id/llP1"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         android:layout_marginTop="14dp"
         android:orientation="horizontal"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -420,7 +420,7 @@
         <ImageView
             android:id="@+id/iv_player1_card1"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="pickCard"
             app:srcCompat="@drawable/eel" />
@@ -428,7 +428,7 @@
         <ImageView
             android:id="@+id/iv_player1_card2"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_height="match_parent"
             android:layout_weight="1"
             android:onClick="pickCard"
             app:srcCompat="@drawable/goose" />
@@ -436,13 +436,14 @@
 
     <ImageView
         android:id="@+id/iv_middle_card"
-        android:layout_width="100dp"
-        android:layout_height="300dp"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
         android:layout_margin="0dp"
         android:padding="0dp"
         android:rotation="90"
-        app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
+        app:layout_constraintBottom_toTopOf="@+id/llP1"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+        app:layout_constraintStart_toEndOf="@+id/linearLayout"
+        app:layout_constraintTop_toBottomOf="@+id/llP2"
         app:srcCompat="@drawable/elephant" />
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -1,8 +1,6 @@
 package com.example.onitama
 
 import android.content.Intent
-import android.graphics.drawable.ColorDrawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.Menu
@@ -10,17 +8,15 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.Button
 import android.widget.ImageView
-import android.widget.LinearLayout
 import android.widget.Toast
 import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
+import androidx.appcompat.app.AppCompatActivity
 import com.example.onitama.card.*
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
 import java.util.*
-import kotlin.collections.ArrayList
-import kotlin.concurrent.schedule
 import kotlin.math.max
 import kotlin.math.min
 import kotlin.random.Random
@@ -103,9 +99,16 @@ class MainActivity : AppCompatActivity() {
                     choiceAI.clear()
 
                     //lakukan simulated click
-                    colorCard()
-                    if(histTile1>-1 && histTile1<tiles.size) tiles[histTile1].performClick()
-                    if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
+                    val handler = Handler()
+                    handler.postDelayed(Runnable {
+                        colorCard()
+                    }, 750)
+                    handler.postDelayed(Runnable {
+                        if(histTile1>-1 && histTile1<tiles.size) tiles[histTile1].performClick()
+                    }, 1750)
+                    handler.postDelayed(Runnable {
+                        if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
+                    }, 2750)
                 }
             }
         }
@@ -467,14 +470,18 @@ class MainActivity : AppCompatActivity() {
         //lakukan highlight dan masukkan button ke highligted button
         highlightedTiles.clear()
         var flip = 1
+        var ctr = 0
         if(p == "2") flip = -1
         for (i in 0..card.size-1){
-            var ctr = getTile(x+card.x[i]*flip,y+card.y[i]*flip)
+            ctr = getTile(x+card.x[i]*flip,y+card.y[i]*flip)
             if(ctr > -1 && tiles[ctr].text != "M$p" && tiles[ctr].text != "S$p") {
                 tiles[ctr].setBackgroundColor(resources.getColor(R.color.highlight))
                 highlightedTiles.add(tiles[ctr])
             }
         }
+        //higlight self
+        ctr = getTile(x,y)
+        tiles[ctr].setBackgroundColor(resources.getColor(R.color.self))
     }
 
     fun nextPlace(b: ArrayList<ArrayList<String>>, x:Int, y:Int):ArrayList<ArrayList<String>>{
