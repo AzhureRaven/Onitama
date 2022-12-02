@@ -104,41 +104,33 @@ class Board(
 
     fun sbe(): Int{
         //lakukan sbe
-        //fitur 1: manhattan distance master ke temple enemy
-        //P2
+        //fitur 1: manhattan distance master ke temple lawan
+        var f1p1 = 0
+        var mx1 = -1
+        var my1 = -1
         var f1p2 = 0
         var mx2 = -1
         var my2 = -1
         for (i in 2..6) {
             for (j in 2..6) {
-                if(this.board[i][j] == "M2"){
-                    mx2 = j
-                    my2 = i
-                    break
-                }
-            }
-        }
-        f1p2 = abs(6 - my2) + abs(4 - mx2)
-
-        //P1
-        var f1p1 = 0
-        var mx1 = -1
-        var my1 = -1
-        for (i in 2..6) {
-            for (j in 2..6) {
                 if(this.board[i][j] == "M1"){
                     mx1 = j
                     my1 = i
-                    break
+                }
+                else if(this.board[i][j] == "M2"){
+                    mx2 = j
+                    my2 = i
                 }
             }
         }
+        //mengitung jarak master ke temple lawan
+        f1p2 = abs(6 - my2) + abs(4 - mx2)
         f1p1 = abs(2 - my1) + abs(4 - mx1)
 
         //fitur 2: jumlah student
-        //fitur 3: average manhattan distance student ke enemy master
         var f2p2 = 0
         var f2p1 = 0
+        //fitur 3: average manhattan distance student ke enemy master
         var f3p2 = 0
         var f3p1 = 0
         for (i in 2..6) {
@@ -151,17 +143,14 @@ class Board(
                     f2p1++
                     f3p1 += abs(my2 - i) + abs(mx2 - j)
                 }
-                if(f2p2 == 5 && f2p1 == 5) break
             }
-            if(f2p2 == 5 && f2p1 == 5) break
         }
-
         //menghitung average distance student-enemy master. Jika tidak ada student, otomatis highest averga (8)
         if(f2p1 > 0)f3p1 /= f2p1 else f3p1 = 8
         if(f2p2 > 0)f3p2 /= f2p2 else f3p2 = 8
 
         //apply weight dan return value
-        return (f1p1 - f1p2)*2 + (f2p2*6 - f2p1*2) + (f3p1 - f3p2)*8
+        return (f1p1 - f1p2)*6 + (f2p2*6 - f2p1*2) + (f3p1 - f3p2)*8
     }
 
 
