@@ -8,9 +8,12 @@
     <color name="black">#FF000000</color>
     <color name="white">#FFFFFFFF</color>
     <color name="normal">#FFDFD7D4</color>
-    <color name="highlight">#FF00BCD4</color>
-    <color name="self">#FF99BCD4</color>
-    <color name="p1">#FF3700B3</color>
-    <color name="p2">#FFE91E63</color>
+    <color name="highlight">#00FFD9</color>
+    <color name="self">#19D5B9</color>
+    <color name="p1">#3F51B5</color>
+    <color name="p2">#AF2E48</color>
+    <color name="d1">#03A9F4</color>
+    <color name="d2">#FF0000</color>
     <color name="background">#FFF3EDCF</color>
+    <color name="win">#8BC34A</color>
 </resources>

@@ -60,16 +60,10 @@ class MainActivity : AppCompatActivity() {
 
         mode = intent.getStringExtra("mode").toString();
         ply = intent.getIntExtra("ply",3).toString().toInt();
-
+        startGame()
         //card = HorseCard()
         //Toast.makeText(this, card.toString(), Toast.LENGTH_LONG).show()
     }
-
-    override fun onStart() {
-        super.onStart()
-        startGame()
-    }
-
 
     var choiceAI: ArrayList<Board> = ArrayList()
     fun AIMove(){
@@ -302,7 +296,29 @@ class MainActivity : AppCompatActivity() {
         var counter=0
         for (i in 2..6) {
             for (j in 2..6) {
-                tiles.get(counter).setText(board.board[i][j])
+                val tile = board.board[i][j]
+                when(tile){
+                    "M1" -> {
+                        tiles.get(counter).setText("♝")
+                        tiles.get(counter).setTextColor(resources.getColor(R.color.d1))
+                    }
+                    "S1" -> {
+                        tiles.get(counter).setText("♟")
+                        tiles.get(counter).setTextColor(resources.getColor(R.color.d1))
+                    }
+                    "M2" -> {
+                        tiles.get(counter).setText("♝")
+                        tiles.get(counter).setTextColor(resources.getColor(R.color.d2))
+                    }
+                    "S2" -> {
+                        tiles.get(counter).setText("♟")
+                        tiles.get(counter).setTextColor(resources.getColor(R.color.d2))
+                    }
+                    else -> {
+                        tiles.get(counter).setText("")
+                        tiles.get(counter).setTextColor(resources.getColor(R.color.black))
+                    }
+                }
                 counter++
             }
         }
@@ -443,21 +459,19 @@ class MainActivity : AppCompatActivity() {
                 print_to_board()
                 tileP = -1
                 cekMenang(lokasi[1].toInt(),lokasi[0].toInt())
-                cekLegal()
-                pickedCard = -1
-                highlightedTiles.clear()
             }
             else{ //highlight legal tiles
                 colorTile()
                 highlightedTiles.clear()
+                val tile = board.board[lokasi[0].toInt()][lokasi[1].toInt()]
                 if(board.turn == "P1"){
-                    if(button.text == "M1" || button.text == "S1"){
+                    if(tile == "M1" || tile == "S1"){
                         highlight(board.cardP1[pickedCard],lokasi[1].toInt(),lokasi[0].toInt(),"1")
                         tileP = getTile(lokasi[1].toInt(),lokasi[0].toInt())
                     }
                 }
                 else{
-                    if(button.text == "M2" || button.text == "S2"){
+                    if(tile == "M2" || tile == "S2"){
                         highlight(board.cardP2[pickedCard],lokasi[1].toInt(),lokasi[0].toInt(),"2")
                         tileP = getTile(lokasi[1].toInt(),lokasi[0].toInt())
                     }
@@ -475,10 +489,14 @@ class MainActivity : AppCompatActivity() {
         highlightedTiles.clear()
         var flip = 1
         var ctr = 0
+        var tile = ""
         if(p == "2") flip = -1
         for (i in 0..card.size-1){
-            ctr = getTile(x+card.x[i]*flip,y+card.y[i]*flip)
-            if(ctr > -1 && tiles[ctr].text != "M$p" && tiles[ctr].text != "S$p") {
+            val mx = x+card.x[i]*flip
+            val my = y+card.y[i]*flip
+            ctr = getTile(mx,my)
+            tile = board.board[my][mx]
+            if(ctr > -1 && tile != "M$p" && tile != "S$p") {
                 tiles[ctr].setBackgroundColor(resources.getColor(R.color.highlight))
                 highlightedTiles.add(tiles[ctr])
             }
@@ -554,13 +572,18 @@ class MainActivity : AppCompatActivity() {
         var kondisi = board.cekKondisi()
         if(kondisi == "P1" || kondisi == "P2"){
             game = false
-            tiles[getTile(x,y)].setBackgroundColor(resources.getColor(R.color.teal_200))
+            tiles[getTile(x,y)].setBackgroundColor(resources.getColor(R.color.win))
             Handler().postDelayed({
                 val intent = Intent(this, ResultActivity::class.java)
                 if(kondisi == "P2" && mode=="AI") kondisi = "AI"
                 intent.putExtra("win", kondisi)
                 launcher.launch(intent)
             },1500)
+        }
+        else{
+            pickedCard = -1
+            highlightedTiles.clear()
+            cekLegal()
         }
     }
 
