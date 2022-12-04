@@ -1,5 +1,7 @@
 package com.example.onitama
 
+import android.app.AlertDialog
+import android.content.DialogInterface
 import android.content.Intent
 import android.os.Bundle
 import android.os.Handler
@@ -95,7 +97,7 @@ class MainActivity : AppCompatActivity() {
 
                     //lakukan simulated click
                     val handler = Handler()
-                    getWindow().setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
+                    window.setFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE,
                         WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     handler.postDelayed(Runnable {
                         colorCard()
@@ -105,7 +107,7 @@ class MainActivity : AppCompatActivity() {
                     }, 1750)
                     handler.postDelayed(Runnable {
                         if(histTile2>-1 && histTile2<tiles.size) tiles[histTile2].performClick()
-                        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
+                        window.clearFlags(WindowManager.LayoutParams.FLAG_NOT_TOUCHABLE)
                     }, 2750)
                 }
             }
@@ -629,59 +631,89 @@ class MainActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         when(item.itemId){
             R.id.optMenu->{
-                finish()
+                quitDialog()
             }
             R.id.optRestart->{
-                startGame()
+                restartDialog()
             }
             R.id.optPlayer->{
-                mode = "P2"
-                startGame()
+                newGameDialog("P2",0)
             }
             R.id.opt1->{
-                mode = "AI"
-                ply = 1
-                startGame()
+                newGameDialog("AI",1)
             }
             R.id.opt2->{
-                mode = "AI"
-                ply = 2
-                startGame()
+                newGameDialog("AI",2)
             }
             R.id.opt3->{
-                mode = "AI"
-                ply = 3
-                startGame()
+                newGameDialog("AI",3)
             }
             R.id.opt4->{
-                mode = "AI"
-                ply = 4
-                startGame()
+                newGameDialog("AI",4)
             }
             R.id.opt5->{
-                mode = "AI"
-                ply = 5
-                startGame()
+                newGameDialog("AI",5)
             }
             R.id.opt6->{
-                mode = "AI"
-                ply = 6
-                startGame()
+                newGameDialog("AI",6)
             }
             R.id.opt7->{
-                mode = "AI"
-                ply = 7
-                startGame()
+                newGameDialog("AI",7)
             }
             R.id.opt8->{
-                mode = "AI"
-                ply = 8
-                startGame()
+                newGameDialog("AI",8)
             }
             else->{
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    fun newGameDialog(md:String,p:Int){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Start A New Game")
+        builder.setMessage("Do you want to start a new game?")
+        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+            mode = md
+            ply = p
+            startGame()
+        })
+        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+        })
+        val alert: AlertDialog = builder.create()
+        alert.show()
+    }
+
+    fun restartDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Restart Game")
+        builder.setMessage("Do you want to restart the game?")
+        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+            startGame()
+        })
+        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+        })
+        val alert: AlertDialog = builder.create()
+        alert.show()
+    }
+
+    fun quitDialog(){
+        val builder: AlertDialog.Builder = AlertDialog.Builder(this)
+        builder.setTitle("Quit Game")
+        builder.setMessage("Do you want to quit the game?")
+        builder.setPositiveButton("Yes", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+            finish()
+        })
+        builder.setNegativeButton("No", DialogInterface.OnClickListener { dialog, which ->
+            dialog.dismiss()
+        })
+        val alert: AlertDialog = builder.create()
+        alert.show()
     }
 
 }
